@@ -91,3 +91,8 @@
 
         return true;
     }
+
+    setTimeout(function() {
+        var successAlert = document.getElementById('alert');
+        successAlert.style.display = 'none';
+    }, 1000);
