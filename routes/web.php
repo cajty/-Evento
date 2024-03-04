@@ -15,7 +15,9 @@ use App\Http\Controllers\AuthController;
 */
 
 
-
+Route::get('/home', function () {
+    return view('home');
+});
 
 
 
