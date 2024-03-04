@@ -40,7 +40,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
 
-                        @if(session('user_name'))
+                        @if(session('user_name')) 
                         <li><a class="dropdown-item" href="{{route('logout')}}">Logout</a></li>
                         @else
                         <li><a class="dropdown-item" href="{{route('register') }}">Sign in</a></li>
