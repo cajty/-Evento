@@ -9,20 +9,16 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        return view('adminDashbord', compact('categories'));
+        $categories = Category::paginate(8); 
+
+    return view('adminDashbord', compact('categories'));
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        return view('adminDashbord', compact('categories'));
-    }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:categories'
+            'name' => 'required|unique:categories|max:17'
         ]);
         Category::create([
             'name' => $request->input('name')
@@ -31,14 +27,22 @@ class CategoryController extends Controller
         return redirect()->route('categories.index');
     }
 
-    public function show(Category $category)
-    {
-        return view('categories.show', compact('category'));
-    }
-
+  
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return '
+            <form action="' . route('categories.update', ['category' => $category->id]) . '" method="POST">
+                ' . csrf_field() . '
+                <div class="d-flex">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="name" class="sr-only">Categories</label>
+                        <input type="text" name="name" id="name" class="form-control" value="'.$category->name.'">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+            </form>';
     }
 
     public function update(Request $request, Category $category)

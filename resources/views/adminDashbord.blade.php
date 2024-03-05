@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container col-3">
-    <div class="card mt-4  ">
-        <div class="card-body" >
-            <h5 class="card-title">
 
-                <form action="{{ route('categories.store') }}" method="POST">
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">
+                <form action="{{ route('categories.store') }}" method="POST" id="category">
                     @csrf
-                    <div class="d-flex">
+                    <div class="d-flex ">
                         <div class="form-group mx-sm-3 mb-2">
                             <label for="name" class="sr-only">Categories</label>
                             <input type="text" name="name" id="name" class="form-control" placeholder="Categories">
@@ -19,18 +19,15 @@
                     </div>
                 </form>
             </h5>
-            <table class="table ">
-
+            <table class="table">
                 <tbody>
                     @foreach ($categories as $category)
                     <tr>
-                        <td>{{ $category->name }}
-
-                        </td>
+                        <td>{{ $category->name }}</td>
                         <td>
-                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary">
+                            <button onclick="get('{{ $category->id }}')" class="btn btn-primary">
                                 <i class="fas fa-edit"></i>
-                            </a>
+                            </button>
                             <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
@@ -41,11 +38,30 @@
                         </td>
                     </tr>
                     @endforeach
-                    
                 </tbody>
             </table>
+                {{ $categories->links('pagination::bootstrap-5') }}
+            
         </div>
     </div>
-
 </div>
+<script>
+    function get(id) {
+        console.log('df1');
+        let url = `/categories/${id}/edit`;
+    let xml = new XMLHttpRequest();
+    xml.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("category").innerHTML = xml.responseText;
+
+            console.log('df');
+       
+        }
+    };
+
+    xml.open("GET", url, true);
+    xml.send();
+}
+
+</script>
 @endsection
