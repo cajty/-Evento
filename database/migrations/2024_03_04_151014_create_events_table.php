@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('location');
             $table->integer('places');
+            $table->boolean('active_status')->default(0);
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('catg_id')->constrained('categories');
             $table->timestamps();
