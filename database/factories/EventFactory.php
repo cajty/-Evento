@@ -19,7 +19,7 @@ class EventFactory extends Factory
     protected $model = Event::class;
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
+        $user = User::where('role_id', 2)->inRandomOrder()->first();
         $category = Category::inRandomOrder()->first();
         return [
             'title' => $this->faker->sentence,
@@ -28,7 +28,8 @@ class EventFactory extends Factory
             'location' => $this->faker->address,
             'places' => $this->faker->randomNumber(2),
             'active_status' => $this->faker->boolean,
-            'user_id' => $user->id,
+            'automatic' => $this->faker->boolean,
+            'orga_id' => $user->id,
             'catg_id' => $category->id,
         ];
     }

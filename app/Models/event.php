@@ -16,8 +16,13 @@ class Event extends Model
         'date',
         'location',
         'places',
-        'user_id',
+        'image_path',
+        'active_status',
+        'automatic',
+        'orga_id',
         'catg_id',
+        'created_at',
+        'updated_at',
     ];
     public function Category()
     {
@@ -26,6 +31,6 @@ class Event extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'orga_id', 'id');
     }
 }

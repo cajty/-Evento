@@ -47,21 +47,9 @@
 </div>
 <script>
     function get(id) {
-        console.log('df1');
+        let place = "category";
         let url = `/categories/${id}/edit`;
-    let xml = new XMLHttpRequest();
-    xml.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("category").innerHTML = xml.responseText;
-
-            console.log('df');
-       
-        }
-    };
-
-    xml.open("GET", url, true);
-    xml.send();
+   request(place,url );
 }
-
 </script>
 @endsection

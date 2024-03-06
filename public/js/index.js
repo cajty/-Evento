@@ -96,3 +96,16 @@
         var successAlert = document.getElementById('alert');
         successAlert.style.display = 'none';
     }, 1000);
+    function request(place, url){
+        let xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById(place).innerHTML = xml.responseText;
+    
+            }
+        };
+    
+        xml.open("GET", url, true);
+        xml.send();
+    
+    }
