@@ -2,7 +2,7 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/index.js') }}"></script>
+
 <div class="container p-5">
 
     <div class="row justify-content-center">
