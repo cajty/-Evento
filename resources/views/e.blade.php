@@ -10,12 +10,12 @@
 
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" name="title" >
+            <input type="text" class="form-control" id="title" name="title">
         </div>
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="4" ></textarea>
+            <textarea class="form-control" id="description" name="description" rows="4"></textarea>
         </div>
 
         <div class="form-group">
@@ -26,19 +26,28 @@
 
         <div class="form-group">
             <label for="date">Date</label>
-            <input type="date" class="form-control" id="date" name="date" >
+            <input type="date" class="form-control" id="date" name="date">
         </div>
 
 
         <div class="form-group">
             <label for="location">Location</label>
-            <input type="text" class="form-control" id="location" name="location" >
+            <input type="text" class="form-control" id="location" name="location">
+        </div>
+        <div class="form-group">
+            <select class="form-select" id="categoryFilter" onchange="filter()">
+                <option value="all">All Categories</option>
+                @foreach($categorys as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
+
+            </select>
         </div>
 
 
         <div class="form-group">
             <label for="places">Places</label>
-            <input type="number" class="form-control" id="places" name="places" >
+            <input type="number" class="form-control" id="places" name="places">
         </div>
 
 
@@ -47,16 +56,18 @@
             <input type="checkbox" class="form-check-input" id="automatic" name="automatic" value="1">
         </div>
 
-
-        <div class="form-group">
-            <label for="orga_id">Orga ID</label>
-            <input type="text" class="form-control" id="orga_id" name="orga_id" >
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select mb-4" id="category" name="catg_id" aria-describedby="">
+                @foreach($categorys as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
         </div>
 
-        <div class="form-group">
-            <label for="catg_id">Catg ID</label>
-            <input type="text" class="form-control" id="catg_id" name="catg_id" >
-        </div>
+
+
+
 
         <button type="submit" class="btn btn-primary">Create</button>
     </form>

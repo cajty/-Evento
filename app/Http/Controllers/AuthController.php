@@ -10,6 +10,46 @@ use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        $users = User::orderBy('created_at', 'desc')->paginate(8);
+       
+        
+   
+
+    return view('admin.adminUser', compact('users'));
+    }
+    // public function index()
+    // {
+       
+    // return view('ajax.user', compact('users'));
+    // }
+    public function destroy(User $user)
+    {
+        $user->delete();
+        $users = User::orderBy('created_at', 'desc')->paginate(8);
+        return view('ajax.user', compact('users'));
+       
+    }
+    public function changeRole(User $user)
+    {
+            if(  $user->role->name  === "User"){
+                $user->update([
+                    'role_id' => 2,
+                ]);
+            }else{
+                $user->update([
+                    'role_id' => 1,
+                ]);
+
+            }
+       
+            $users = User::orderBy('created_at', 'desc')->paginate(8);
+        return view('ajax.user', compact('users'));
+    }
+  
+
     public function showRegistrationForm()
     {
         return view('auth.register');

@@ -22,12 +22,23 @@ Route::get('/home', function () {
 });
 
 
+
+
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
 Route::post('/eventsstor', [EventController::class, 'store'])->name('events.store');
 Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
-Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');;
+Route::put('/eventsu/{event}', [EventController::class, 'update'])->name('events.update');
+Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+Route::get('/eventsv', [EventController::class, 'eventToValidat'])->name('events.validat');
+Route::get('/event.is.validat/{event}', [EventController::class, 'eventIsValid'])->name('event.is.validat');
+Route::get('/eventso', [EventController::class, 'eventOfOrga'])->name('events.orga');
+Route::get('/searchEvent/{search}', [EventController::class, 'searchEvent'])->name('events.search');
+Route::get('/categoryFilter/{id}', [EventController::class, 'filterEvent'])->name('events.filterEvent');
+
+
+
+
 
 
 
@@ -47,6 +58,14 @@ Route::post('/login', [AuthController::class, 'login'])->name('loginUser');
 
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/user', [AuthController::class, 'index'])->name('get.user');
+Route::delete('/users/{user}', [AuthController::class, 'destroy'])->name('users.destroy');
+Route::get('/users/{user}/role', [AuthController::class, 'changeRole'])->name('users.role');
+
+
+
+
+
 
 
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');

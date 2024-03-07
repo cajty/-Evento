@@ -20,10 +20,13 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
 
-                        <a class="nav-link" href="{{ route('events.create') }}">Events</a>
+                        <a class="nav-link" href="{{ route('events.create') }}">Events</a> 
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('events.index') }}">Reservation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('categories.index') }}">admin</a>
                     </li>
                 </ul>
                 <div class="dropdown">
@@ -71,7 +74,7 @@
 
     @yield('content')
     </div>
-    <footer class="py-4 bg-dark text-white">
+    <footer class="py-4 bg-dark text-white sticky-bottom">
         <div class="container text-center">
             <p>&copy; 2024 EventOrg. All rights reserved.</p>
         </div>
@@ -81,3 +84,11 @@
 </body>
 
 </html>
+<style>
+        .side {
+            height: 95vh;
+
+
+
+        }
+    </style>

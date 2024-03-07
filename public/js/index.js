@@ -96,6 +96,7 @@
         var successAlert = document.getElementById('alert');
         successAlert.style.display = 'none';
     }, 1000);
+    
     function request(place, url){
         let xml = new XMLHttpRequest();
         xml.onreadystatechange = function() {

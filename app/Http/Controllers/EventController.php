@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,13 +11,39 @@ class EventController extends Controller
 {
     public function index()
     {
+        $events = Event::where('active_status', 0)->paginate(12);
+        $categorys = Category::all();
+        return view('home', compact('events', 'categorys'));
+    }
+    public function eventToValidat()
+    {
         $events = Event::paginate(12);
+        return view('admin.adminEvent', compact('events'));
+    }
+    public function eventIsValid(Event $event)
+    {
+
+        $event->update([
+            'active_status' => 1,
+        ]);
+
+        $events = Event::orderBy('created_at', 'desc')->paginate(12);
+
+        return view('ajax.eventValidet', compact('events'));
+    }
+
+
+    public function eventOfOrga()
+    {
+        $events = Event::where('orga_id', Auth::user()->id)->paginate(12);
         return view('home', compact('events'));
     }
 
+
     public function create()
     {
-        return view('e');
+        $categorys = Category::all();
+        return view('e', compact('categorys'));
     }
 
     public function store(Request $request)
@@ -57,7 +84,7 @@ class EventController extends Controller
 
 
 
-      
+
 
         return redirect()->route('events.index')->with('success', 'Event created successfully');
     }
@@ -74,8 +101,7 @@ class EventController extends Controller
 
     public function update(Event $event)
     {
-        $event = Event::find($event->id);
-        $validatedData = $event->validate([
+        $validatedData = request()->validate([
             'title' => 'required',
             'description' => 'required',
             'date' => 'required|date',
@@ -84,18 +110,8 @@ class EventController extends Controller
             'automatic' => 'boolean',
             'catg_id' => 'required|exists:categories,id',
         ]);
-        $validatedData->update([
-            'title' => $event->title,
-            'description' => $event->description,
-            'date' => $event->date,
-            'location' => $event->location,
-            'places' => $event->places,
-            'active_status' => $event->active_status,
-            'automatic' => $event->automatic,
-            'orga_id' => Auth::user()->id,
-            'catg_id' => $event->catg_id,
-        ]);
 
+        $event->update($validatedData);
 
         return redirect()->route('events.index')->with('success', 'Event updated successfully');
     }
@@ -103,6 +119,33 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         $event->delete();
-        return redirect()->route('events.index')->with('success', 'Event deleted successfully');
+        return redirect()->back()->with('success', 'Event deleted successfully');
+    }
+
+
+    public function searchEvent($search)
+    {
+       
+        if ($search === "allEvents") {
+            $events = Event::where('active_status', 0)->paginate(12);
+        } else {
+            $events = Event::where('active_status', 0)
+                ->where('title', 'like', '%' . $search . '%')->paginate(12);
+        }
+
+        return view('ajax.event', compact('events'));
+    }
+
+    public function filterEvent($id)
+    {
+      
+        if ($id === "allEvents") {
+            $events = Event::where('active_status', 0)->paginate(12);
+        } else {
+            $events = Event::where('catg_id', $id)->where('active_status', 0)->paginate(12);
+      
+        }
+        return view('ajax.event', compact('events'));
+       
     }
 }
