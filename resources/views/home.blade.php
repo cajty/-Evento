@@ -22,10 +22,24 @@
 </header>
 
 <!-- Features Section -->
-<section class="py-5">
+<section class="py-5" >
   <div class="container">
-    <div id='event'></div>
     <div class="row">
+      <div class="col-md-4">
+        <label for="titleFilter" class="form-label">Search by Title:</label>
+        <input type="text" class="form-control" id="titleFilter" placeholder="Enter title..." onkeyup="search()">
+      </div>
+      <div class="col-md-4">
+        <label for="categoryFilter" class="form-label">Filter by Category:</label>
+        <select class="form-select" id="categoryFilter" onchange="filter()">
+          <option value="allEvents">All Categories</option>
+          @foreach($categorys as $category)
+          <option value="{{$category->id}}">{{$category->name}}</option>
+          @endforeach
+
+        </select>
+      </div>
+      <div id="event">
       @foreach ($events as $event)
       <div class="col-md-4 mb-4">
         <div class="card">
@@ -49,6 +63,8 @@
       </div>
       @endforeach
       {{ $events->links("pagination::bootstrap-5") }}
+      </div>
+     
     </div>
 </section>
 
@@ -57,8 +73,48 @@
     let place = "event";
     let url = `/events/${id}/edit`;
     request(place, url);
+    eval(document.getElementById("runscript").innerHTML);
+    eval(closeModal());
+
+   
   }
+  function closeModal() {
+      let modalElement = document.getElementById('exampleModal');
+      modalElement.classList.remove('show');
+      modalElement.setAttribute('aria-modal', 'false');
+      modalElement.style.display = 'none';
+    }
+
+    function search() {
+       valueInput = document.getElementById('titleFilter').value;
+  if (valueInput === '') {
+        let place = "event";
+        let url = '/searchEvent/allEvents';
+        request(place, url);  
+  } else{
+    let place = "event";
+        let url = '/searchEvent/' + valueInput;
+        request(place, url);  
+  }
+      
+
+    }
+
+    function filter() {
+      let category = document.getElementById('categoryFilter').value;
+    
+        let place = "event";
+        let url = '/categoryFilter/' + category;
+        request(place, url);  
+      
+    
+      
+    }
+  
+
 </script>
+
+
 
 
 

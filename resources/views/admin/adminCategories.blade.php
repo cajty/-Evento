@@ -1,9 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container col-3">
+<div class="container row ">
 
-    <div class="card mt-4">
+    <div class="row">
+        <div class="col-md-3 bg-dark p-4 d-none d-md-block sticky-top side">
+            <h4 class="text-light">Admin </h4>
+            <ul class="list-group">
+               
+               
+                <li class="list-group-item" onclick="eventToValidat()" >ffffffffEvento</li>
+                <li class="list-group-item"> <a class="list-group-item" href="{{ route('categories.index') }}">Categories</a></li>
+                <li class="list-group-item"> <a class="list-group-item" href="{{ route('events.validat') }}">Evento</a></li>
+                <li class="list-group-item"> <a class="list-group-item" href="{{ route('get.user') }}">User</a></li>
+
+            </ul>
+        </div>
+    <div class="card mt-4 col-8 m-5" id = "d">
         <div class="card-body">
             <h5 class="card-title">
                 <form action="{{ route('categories.store') }}" method="POST" id="category">
@@ -41,15 +54,23 @@
                 </tbody>
             </table>
                 {{ $categories->links('pagination::bootstrap-5') }}
+
+                
             
         </div>
     </div>
+    
 </div>
 <script>
     function get(id) {
         let place = "category";
         let url = `/categories/${id}/edit`;
-   request(place,url );
+        request(place,url );
+}
+function eventToValidat(){
+    let url = `/eventsv`;
+    let place = "d";
+    request(place,url );
 }
 </script>
 @endsection

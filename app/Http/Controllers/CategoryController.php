@@ -9,10 +9,14 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::orderBy('created_at', 'desc')->paginate(8); 
+        $categories = Category::orderBy('created_at', 'desc')->paginate(8);
+        
+   
 
-    return view('adminDashbord', compact('categories'));
+    return view('admin.adminCategories', compact('categories'));
     }
+
+    
 
 
     public function store(Request $request)
