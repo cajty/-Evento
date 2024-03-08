@@ -45,11 +45,6 @@
         </div>
 
 
-        <div class="form-group">
-            <label for="places">Places</label>
-            <input type="number" class="form-control" id="places" name="places">
-        </div>
-
 
         <div class="form-group">
             <label for="automatic">Automatic</label>

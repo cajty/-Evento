@@ -17,7 +17,6 @@ return new class extends Migration
             $table->text('description');
             $table->date('date');
             $table->string('location');
-            $table->integer('places');
             $table->string('image_path')->nullable();
             $table->boolean('active_status')->default(0);
             $table->boolean('automatic')->default(0);

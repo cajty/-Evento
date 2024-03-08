@@ -18,11 +18,14 @@ use App\Http\Controllers\EventController;
 
 
 Route::get('/home', function () {
-    return view('home');
+    return view('tickeForm');
 });
 
 
 
+
+Route::get('/events/{event}/validate', [EventController::class, 'eventValidate'])->name('events.validate');
+Route::get('/events/{event}/deactivate', [EventController::class, 'eventDeactivate'])->name('events.deactivate');
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
