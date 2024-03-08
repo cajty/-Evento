@@ -26,7 +26,6 @@ class EventFactory extends Factory
             'description' => $this->faker->paragraph,
             'date' => $this->faker->date,
             'location' => $this->faker->address,
-            'places' => $this->faker->randomNumber(2),
             'active_status' => $this->faker->boolean,
             'automatic' => $this->faker->boolean,
             'orga_id' => $user->id,

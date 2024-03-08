@@ -9,7 +9,6 @@
             <ul class="list-group">
 
 
-                <li class="list-group-item" onclick="eventToValidat()">ffffffffEvento</li>
                 <li class="list-group-item"> <a class="list-group-item" href="{{ route('categories.index') }}">Categories</a></li>
                 <li class="list-group-item"> <a class="list-group-item" href="{{ route('events.validat') }}">Events</a></li>
                 <li class="list-group-item"> <a class="list-group-item" href="{{ route('get.user') }}">User</a></li>
@@ -48,14 +47,14 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td>
-                                       
-                                        @if($event->active_status == 0)
-                                        <button type="submit" id="test" onclick="gets('{{ $event->id }}')" class="btn btn-success">
+                                    <td id="{{ $event->id }}">
+                                   
+                                        @if($event->active_status === 1)
+                                        <button type="submit"  onclick="getsDe('{{ $event->id }}')" class="btn btn-success">
                                             Validate
                                         </button>
                                         @else
-                                        <button type="submit" id="test" onclick="gets('{{ $event->id }}')" class="btn btn-danger">
+                                        <button type="submit"  onclick="getsV('{{ $event->id }}')" class="btn btn-danger">
                                             Deactivate
                                         </button>
                                         @endif
@@ -71,7 +70,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                       
+
                     </div>
                 </div>
             </div>
@@ -79,16 +78,21 @@
 
     </div>
     <script>
-        function gets(id) {
+        function getsDe(id) {
 
-            let place = "eventVa";
-            let url = `/event.is.validat/${id}`;
+            let place  = id;
+            let url = `/events/${id}/validate`;
+
+
             request(place, url);
         }
 
-        function eventToValidat() {
-            let url = `/eventsv`;
-            let place = "d";
+        function getsV(id) {
+
+        
+            let place  = id;
+            let url = `/events/${id}/deactivate`;
+
             request(place, url);
         }
     </script>

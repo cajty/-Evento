@@ -20,16 +20,21 @@ class EventController extends Controller
         $events = Event::paginate(12);
         return view('admin.adminEvent', compact('events'));
     }
-    public function eventIsValid(Event $event)
+    public function eventValidate(Event $event)
     {
-
         $event->update([
             'active_status' => 1,
         ]);
+        return view('ajax.eventValidate', compact('event'));
+    }
 
-        $events = Event::orderBy('created_at', 'desc')->paginate(12);
 
-        return view('ajax.eventValidet', compact('events'));
+    public function eventDeactivate(Event $event)
+    {
+        $event->update([
+            'active_status' => 0,
+        ]);
+        return view('ajax.eventDeactivate', compact('event'));
     }
 
 
@@ -54,7 +59,6 @@ class EventController extends Controller
             'description' => 'required',
             'date' => 'required|date',
             'location' => 'required',
-            'places' => 'required|integer',
             'automatic' => 'boolean',
             'catg_id' => 'required|exists:categories,id',
         ]);
@@ -63,7 +67,6 @@ class EventController extends Controller
             'description' => $request->description,
             'date' => $request->date,
             'location' => $request->location,
-            'places' => $request->places,
             'active_status' => 0,
             'automatic' => $request->automatic,
             'orga_id' => Auth::user()->id,
@@ -106,7 +109,6 @@ class EventController extends Controller
             'description' => 'required',
             'date' => 'required|date',
             'location' => 'required',
-            'places' => 'required|integer',
             'automatic' => 'boolean',
             'catg_id' => 'required|exists:categories,id',
         ]);
@@ -125,7 +127,7 @@ class EventController extends Controller
 
     public function searchEvent($search)
     {
-       
+
         if ($search === "allEvents") {
             $events = Event::where('active_status', 0)->paginate(12);
         } else {
@@ -138,14 +140,12 @@ class EventController extends Controller
 
     public function filterEvent($id)
     {
-      
+
         if ($id === "allEvents") {
             $events = Event::where('active_status', 0)->paginate(12);
         } else {
             $events = Event::where('catg_id', $id)->where('active_status', 0)->paginate(12);
-      
         }
         return view('ajax.event', compact('events'));
-       
     }
 }
