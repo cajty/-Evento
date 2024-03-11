@@ -24,12 +24,12 @@
 <!-- Features Section -->
 <section class="py-5" >
   <div class="container">
-    <div class="row">
-      <div class="col-md-4">
+    <div class="row " >
+      <div class="col-md-4 py-2">
         <label for="titleFilter" class="form-label">Search by Title:</label>
         <input type="text" class="form-control" id="titleFilter" placeholder="Enter title..." onkeyup="search()">
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 py-2">
         <label for="categoryFilter" class="form-label">Filter by Category:</label>
         <select class="form-select" id="categoryFilter" onchange="filter()">
           <option value="allEvents">All Categories</option>
@@ -39,7 +39,7 @@
 
         </select>
       </div>
-      <div id="event">
+      <div class="row border-top p-3" id="event">
       @foreach ($events as $event)
       <div class="col-md-4 mb-4">
         <div class="card">
@@ -48,16 +48,7 @@
             <i class="card-text">{{ $event->date }}</i>
             <p> in : {{ $event->location }} </p>
             <p> in : {{ $event->category->name }} </p>
-            <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </form>
-            <button onclick="get('{{ $event->id }}')" class="btn btn-primary">
-              <i class="fas fa-edit"></i>
-            </button>
+            <a href="{{ route('events.show', $event) }}" class="btn btn-primary">Show Event</a>
           </div>
         </div>
       </div>
@@ -75,8 +66,6 @@
     request(place, url);
     eval(document.getElementById("runscript").innerHTML);
     eval(closeModal());
-
-   
   }
   function closeModal() {
       let modalElement = document.getElementById('exampleModal');

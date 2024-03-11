@@ -13,42 +13,27 @@ class AuthController extends Controller
 
     public function index()
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(8);
-       
-        
-   
+        $users = User::where('role_id', '!=', 3)->orderBy('created_at', 'desc')->paginate(8);
+        return view('admin.adminUser', compact('users'));
+    }
 
-    return view('admin.adminUser', compact('users'));
-    }
-    // public function index()
-    // {
-       
-    // return view('ajax.user', compact('users'));
-    // }
-    public function destroy(User $user)
-    {
-        $user->delete();
-        $users = User::orderBy('created_at', 'desc')->paginate(8);
-        return view('ajax.user', compact('users'));
-       
-    }
+
     public function changeRole(User $user)
     {
-            if(  $user->role->name  === "User"){
-                $user->update([
-                    'role_id' => 2,
-                ]);
-            }else{
-                $user->update([
-                    'role_id' => 1,
-                ]);
+        if ($user->role->name  === "User") {
+            $user->update([
+                'role_id' => 2,
+            ]);
+        } else {
+            $user->update([
+                'role_id' => 1,
+            ]);
+        }
 
-            }
-       
-            $users = User::orderBy('created_at', 'desc')->paginate(8);
-        return view('ajax.user', compact('users'));
+
+        return view('ajax.user', compact('user'));
     }
-  
+
 
     public function showRegistrationForm()
     {
@@ -92,7 +77,14 @@ class AuthController extends Controller
             $user = Auth::user();
             session(['user_id' => $user->id, 'user_name' => $user->name]);
 
-            return redirect()->route('login')->with('success', 'ok');
+            if (Auth::user()->role->name === "Administrator") {
+                return redirect()->route('events.validat')->with('success', 'ok');
+            }
+            if (Auth::user()->role->name === "Organizer") {
+                return redirect()->route('events.orga')->with('success', 'ok');
+            }
+
+            return redirect()->route('events.index')->with('success', 'ok');
         }
 
         return back()->withInput()->withErrors([
