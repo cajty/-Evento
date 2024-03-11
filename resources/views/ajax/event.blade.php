@@ -6,16 +6,7 @@
             <i class="card-text">{{ $event->date }}</i>
             <p> in : {{ $event->location }} </p>
             <p> in : {{ $event->category->name }} </p>
-            <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </form>
-            <button onclick="get('{{ $event->id }}')" class="btn btn-primary">
-              <i class="fas fa-edit"></i>
-            </button>
+            <a href="{{ route('events.show', $event) }}" class="btn btn-primary">Show Event</a>
           </div>
         </div>
       </div>

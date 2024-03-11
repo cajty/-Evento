@@ -11,13 +11,14 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::where('active_status', 0)->paginate(12);
+        $events = Event::where('active_status', 1)->has('tickets')->paginate(12);
         $categorys = Category::all();
         return view('home', compact('events', 'categorys'));
     }
     public function eventToValidat()
     {
-        $events = Event::paginate(12);
+
+        $events = Event::has('tickets')->paginate(12);
         return view('admin.adminEvent', compact('events'));
     }
     public function eventValidate(Event $event)
@@ -25,7 +26,7 @@ class EventController extends Controller
         $event->update([
             'active_status' => 1,
         ]);
-        return view('ajax.eventValidate', compact('event'));
+        return view('ajax.eventDeactivate', compact('event'));
     }
 
 
@@ -34,66 +35,68 @@ class EventController extends Controller
         $event->update([
             'active_status' => 0,
         ]);
-        return view('ajax.eventDeactivate', compact('event'));
+        return view('ajax.eventValidate', compact('event'));
     }
 
 
     public function eventOfOrga()
     {
         $events = Event::where('orga_id', Auth::user()->id)->paginate(12);
-        return view('home', compact('events'));
+        return view('organi.event', compact('events'));
     }
 
 
     public function create()
     {
         $categorys = Category::all();
-        return view('e', compact('categorys'));
+        return view('events.creat', compact('categorys'));
     }
 
     public function store(Request $request)
     {
 
-        $validatedData = $request->validate([
+        $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'date' => 'required|date',
+            'date' => 'required|date|after:now +1 day',
             'location' => 'required',
             'automatic' => 'boolean',
             'catg_id' => 'required|exists:categories,id',
         ]);
-        $event = Event::create([
+        // $image = null;
+
+        // if ($request->hasFile()) {
+        //     $image = $request->file('image')->store('images', 'public');
+        //     dd($image); 
+        // }
+
+        // dd($image); 
+        Event::create([
             'title' => $request->title,
             'description' => $request->description,
             'date' => $request->date,
             'location' => $request->location,
             'active_status' => 0,
-            'automatic' => $request->automatic,
+            'automatic' => $request->automatic ?? false,
             'orga_id' => Auth::user()->id,
             'catg_id' => $request->catg_id,
         ]);
 
 
-        //     $imageName = time().'.'.$request->image->extension();
-
-        //    $image = $request->image->move(public_path('images'), $imageName);
-
-        // dd($image); 
-
-
-        // if ($request->hasFile('image')) {
-        //     $validatedData['image_path'] = $request->file('image')->store('images', 'public');
-        // }
 
 
 
 
 
-        return redirect()->route('events.index')->with('success', 'Event created successfully');
+
+
+
+        return redirect()->back()->with('success', 'Event created successfully');
     }
 
     public function show(Event $event)
     {
+
         return view('events.show', compact('event'));
     }
 
@@ -129,9 +132,9 @@ class EventController extends Controller
     {
 
         if ($search === "allEvents") {
-            $events = Event::where('active_status', 0)->paginate(12);
+            $events = Event::where('active_status', 1)->has('tickets')->paginate(12);
         } else {
-            $events = Event::where('active_status', 0)
+            $events = Event::where('active_status', 1)
                 ->where('title', 'like', '%' . $search . '%')->paginate(12);
         }
 
@@ -142,10 +145,16 @@ class EventController extends Controller
     {
 
         if ($id === "allEvents") {
-            $events = Event::where('active_status', 0)->paginate(12);
+            $events = Event::where('active_status', 1)->has('tickets')->paginate(12);
         } else {
-            $events = Event::where('catg_id', $id)->where('active_status', 0)->paginate(12);
+            $events = Event::where('catg_id', $id)->where('active_status', 1)->has('tickets')->paginate(12);
         }
         return view('ajax.event', compact('events'));
+    }
+
+    public function eventReservation(Event $event)
+    {
+
+        return view('events.eventReservation', compact('event'));
     }
 }

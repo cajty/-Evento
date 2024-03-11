@@ -19,4 +19,8 @@ class Ticket extends Model
         return $this->belongsTo(Event::class, 'event_id', 'id');
     }
 
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
+    }
+
 }

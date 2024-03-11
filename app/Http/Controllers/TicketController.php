@@ -3,92 +3,70 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
-    
     public function index()
     {
-        $tickets = Ticket::all();
-        return view('tickets.index', compact('tickets'));
-    }
+       
+        $events = Event::where('orga_id', Auth::user()->id)->get();
 
-   
-    public function create()
-    {
-        return view('tickeFrom');
-    }
-
+       
+        
     
+        return view('tickets.index', compact('events'));
+    }
+
+    public function TicketOfOrg(){
+        $tickets = Ticket::where('orga_id',Auth::user()->id)->get();
+        return view('tickets.TicketOfOrg', compact('tickets'));
+    }
     public function store(Request $request)
     {
-        $ticket = new Ticket;
-     
-        $ticket->price = $request->price;
-        $ticket->places_nbr = $request->places_nbr;
-        $ticket->event_id = $request->event_id;
-        $ticket->type = $request->type;
-        $ticket->save();
+        $validatedData = $request->validate([
+            'price' => 'required',
+            'places_nbr' => 'required',
+            'event_id' => 'required',
+            'type' => 'required',
+        ]);
 
+        Ticket::create($validatedData);
+       
         return redirect()->route('tickets.index')->with('success', 'Ticket created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(Ticket $ticket)
     {
-        $ticket = Ticket::findOrFail($id);
         return view('tickets.show', compact('ticket'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(Ticket $ticket)
     {
-        $ticket = Ticket::findOrFail($id);
-        return view('tickets.edit', compact('ticket'));
+        return view('ajax.ticketupdate', compact('ticket'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    public function update(Ticket $ticket)
     {
-        $ticket = Ticket::findOrFail($id);
-        // Update the ticket object with new values from the request
-        $ticket->price = $request->price;
-        $ticket->places_nbr = $request->places_nbr;
-        $ticket->event_id = $request->event_id;
-        $ticket->type = $request->type;
-        $ticket->save();
+        $validatedData = request()->validate([
+            'price' => 'required',
+            'places_nbr' => 'required',
+            'event_id' => 'required',
+            'type' => 'required',
+        ]);
+
+
+        $ticket->update($validatedData);
 
         return redirect()->route('tickets.index')->with('success', 'Ticket updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Ticket $ticket)
     {
-        $ticket = Ticket::findOrFail($id);
         $ticket->delete();
-
         return redirect()->route('tickets.index')->with('success', 'Ticket deleted successfully');
     }
 }
